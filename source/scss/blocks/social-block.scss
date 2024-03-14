@@ -28,7 +28,6 @@
   }
 
   &::before {
-    @include center;
     position: absolute;
     top: 0;
     left: 0;
@@ -40,8 +39,9 @@
     border: 2px solid $c-light;
     z-index: -1;
     transform: scale(0);
-    transition: transform 0.4s cubic-bezier(.23,1.5,.53,1.07);
-    transition-delay: 0.7s;
+    transform-origin: center;
+    transition: width 0.3s ease, height 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: 0.6s;
 
     .body__loaded & {
       transform: scale(1);
@@ -56,13 +56,13 @@
     height: 2.2rem;
   }
 
-  &:hover,
+  .body__loaded &:hover,
   .social-block--active & {
     color: $c-purple;
 
     &::before {
-      width: 112.5%;
-      height: 112.5%;
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
     }
   }
 
@@ -82,7 +82,7 @@
 
   &:active,
   &:active:focus {
-    color: $c-light;
+    color: $c-purple;
 
     &::before {
       width: 100%;
