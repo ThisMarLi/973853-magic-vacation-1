@@ -8,7 +8,6 @@ export default class FullPageScroll {
 
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
     this.menuElements = document.querySelectorAll(`.page-header__menu .js-menu-link`);
-    this.screenBg = document.querySelector(`.screen--fill`);
 
     this.prevScreen = `top`;
     this.activeScreen = 0;
@@ -54,31 +53,45 @@ export default class FullPageScroll {
   }
 
   changeVisibilityDisplay() {
-    if (this.prevScreen === `story` && this.screenElements[this.activeScreen].id === `prizes`) {
-      this.screenBg.classList.add(`active`);
+    let isHistoryScreen = false;
+    const hiddenClass = `screen--hidden`;
+    const activeClass = `active`;
+    const bgClass = `screen--fill`;
 
+    this.screenElements.forEach((screen) => {
+      if (screen.id === `top` && screen.classList.contains(activeClass)) {
+        this.introScene = true;
+      }
+
+      if (screen.id === `story` && screen.classList.contains(activeClass)) {
+        isHistoryScreen = true;
+        screen.classList.remove(activeClass);
+        screen.classList.add(bgClass);
+
+        setTimeout(() => {
+          screen.classList.add(hiddenClass);
+          screen.classList.remove(bgClass);
+        }, 450);
+      } else {
+        screen.classList.add(hiddenClass);
+        screen.classList.remove(activeClass);
+      }
+    });
+
+    if (isHistoryScreen) {
       setTimeout(() => {
-        this.screenElements.forEach((screen) => {
-          screen.classList.add(`screen--hidden`);
-          screen.classList.remove(`active`);
-        });
-        this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
-        this.screenElements[this.activeScreen].classList.add(`active`);
-        this.screenBg.classList.remove(`active`);
-      }, 400);
+        this.setActiveScreen();
+      }, 450);
     } else {
-      this.screenElements.forEach((screen) => {
-        screen.classList.add(`screen--hidden`);
-        screen.classList.remove(`active`);
-      });
-
-      this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
-      setTimeout(() => {
-        this.screenElements[this.activeScreen].classList.add(`active`);
-      }, 100);
-
-      this.prevScreen = this.screenElements[this.activeScreen].id;
+      this.setActiveScreen();
     }
+  }
+
+  setActiveScreen() {
+    this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
+    setTimeout(() => {
+      this.screenElements[this.activeScreen].classList.add(`active`);
+    }, 100);
   }
 
   changeActiveMenuItem() {
